@@ -165,12 +165,19 @@ prompt_dir() {
   # prompt_segment 008 010 $(basename `pwd`) 
 }
 
-# Virtualenv: current working virtualenv
-prompt_virtualenv() {
+# Conda Virtualenv: current working conda virtualenv
+prompt_conda_virtualenv() {
   if [[ -n $CONDA_PROMPT_MODIFIER ]]; then
-    prompt_segment black default ${CONDA_PROMPT_MODIFIER:1:-2}
+    prompt_segment black default "🐍${CONDA_PROMPT_MODIFIER:1:-2}"
   fi
 }
+
+# Virtualenv: current working virtualenv
+prompt_virtualenv() {
+  if [[ -n $VIRTUAL_ENV ]]; then 
+    prompt_segment black default "🪐$(basename ${VIRTUAL_ENV})"
+  fi
+} # replaced CONDA_PROMPT_MODIFIER with VIRTUAL_ENV
 
 # Status:
 # - was there an error
@@ -197,6 +204,7 @@ build_prompt() {
   prompt_head
   prompt_status
   prompt_virtualenv
+  prompt_conda_virtualenv
   prompt_context
   # prompt_dir
   prompt_git
